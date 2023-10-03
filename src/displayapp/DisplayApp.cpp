@@ -223,13 +223,12 @@ void DisplayApp::Refresh() {
         RestoreBrightness();
         break;
       case Messages::GoToSleep:
-        while (brightnessController.Level() != Controllers::BrightnessController::Levels::Off) {
-          brightnessController.Lower();
-          vTaskDelay(100);
-        }
 	// Don't actually turn off the display for always on mode
 	if (!settingsController.GetAlwaysOnDisplay()) {
+	  brightnessController.Set(Controllers::BrightnessController::Levels::Off);
           lcd.Sleep();
+	} else {
+	  brightnessController.Set(Controllers::BrightnessController::Levels::Lowest);
 	}
         PushMessageToSystemTask(Pinetime::System::Messages::OnDisplayTaskSleeping);
         state = States::Idle;

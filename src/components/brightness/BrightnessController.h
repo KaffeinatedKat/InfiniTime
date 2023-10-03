@@ -1,12 +1,15 @@
 #pragma once
 
 #include <cstdint>
+#include <cmath>
+#include <FreeRTOS.h>
+#include <task.h>
 
 namespace Pinetime {
   namespace Controllers {
     class BrightnessController {
     public:
-      enum class Levels { Off, Low, Medium, High };
+      enum class Levels { Off, Lowest, Low, Medium, High };
       void Init();
 
       void Set(Levels level);
@@ -21,7 +24,8 @@ namespace Pinetime {
     private:
       Levels level = Levels::High;
       uint16_t pwmSequence[1] = {10000};
-
+      uint16_t pwmVal;
+      uint16_t getPwm(Levels level);
       void setPwm(uint16_t val);
     };
   }

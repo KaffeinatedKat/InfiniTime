@@ -42,22 +42,36 @@ void BrightnessController::setPwm(uint16_t val) {
   nrf_pwm_task_trigger(NRF_PWM0, NRF_PWM_TASK_SEQSTART0);
 };
 
-void BrightnessController::Set(BrightnessController::Levels level) {
+uint16_t BrightnessController::getPwm(BrightnessController::Levels level) {
   this->level = level;
   switch (level) {
     default:
     case Levels::High:
-      setPwm(10000);
-      break;
+      return 10000;
     case Levels::Medium:
-      setPwm(3800);
-      break;
+      return 4000;
     case Levels::Low:
-      setPwm(830);
-      break;
+      return 900;
+    case Levels::Lowest:
+      return 100;
     case Levels::Off:
-      setPwm(70);
-      break;
+      return 0;
+  }
+}
+
+void BrightnessController::Set(BrightnessController::Levels level) {
+  this->level = level;
+  uint16_t target = getPwm(level);
+  uint16_t step = abs((pwmVal - target) / 10);
+
+  while (target != pwmVal) {
+    if (target > pwmVal) {
+      pwmVal += step;
+    } else {
+      pwmVal -= step;
+    }
+    setPwm(pwmVal);
+    vTaskDelay(15);
   }
 }
 
