@@ -188,7 +188,16 @@ void DisplayApp::Refresh() {
   TickType_t queueTimeout;
   switch (state) {
     case States::Idle:
-      queueTimeout = portMAX_DELAY;
+      if (settingsController.GetAlwaysOnDisplay()) {
+        if (!currentScreen->IsRunning()) {
+          LoadPreviousScreen();
+        }
+	int lvglWaitTime = lv_task_handler();
+	// while in always on mode, throttle LVGL events to 4Hz
+        queueTimeout = std::max(lvglWaitTime, 250);
+      } else {
+        queueTimeout = portMAX_DELAY;
+      }
       break;
     case States::Running:
       if (!currentScreen->IsRunning()) {
@@ -229,7 +238,7 @@ void DisplayApp::Refresh() {
           lcd.Sleep();
 	} else {
 	  brightnessController.Set(Controllers::BrightnessController::Levels::Lowest);
-	}
+	} 
         PushMessageToSystemTask(Pinetime::System::Messages::OnDisplayTaskSleeping);
         state = States::Idle;
         break;
