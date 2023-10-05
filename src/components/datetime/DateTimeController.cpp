@@ -94,11 +94,18 @@ void DateTime::UpdateTime(uint32_t systickCounter) {
     // Quiet Hour Start
     if (quietHour[0].auto_toggle && quietHour[0].time == now) {
       settingsController.SetNotificationStatus(Controllers::Settings::Notification::Sleep);
+      if (systemTask != nullptr && settingsController.GetAlwaysOnDisplaySetting()) {
+	systemTask->PushMessage(System::Messages::GoToRunning);
+      }
     }
     // Quiet Hour Stop
     if (quietHour[1].auto_toggle && quietHour[1].time == now) {
       settingsController.SetNotificationStatus(settingsController.GetPrevNotificationStatus());
+      if (systemTask != nullptr && settingsController.GetAlwaysOnDisplaySetting()) {
+	systemTask->PushMessage(System::Messages::GoToRunning);
+      }
     }
+
   } else if (minute != 0 && minute != 30) {
     isHalfHourAlreadyNotified = false;
   }

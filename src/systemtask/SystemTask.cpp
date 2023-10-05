@@ -196,7 +196,7 @@ void SystemTask::Work() {
           break;
         case Messages::GoToRunning:
 	  // spi doesn't go to sleep for always on mode
-	  if (!settingsController.GetAlwaysOnDisplay()) {
+	  if (!settingsController.GetAlwaysOnDisplaySetting()) {
             spi.Wakeup();
 	  }
 
@@ -352,7 +352,7 @@ void SystemTask::Work() {
 
 	  // If the spi goes to sleep, AlwaysOn will not update the screen while dim, and the screen colors invert
 	  // upon wakeup
-	  if (!settingsController.GetAlwaysOnDisplay()) {
+	  if (!settingsController.GetAlwaysOnDisplaySetting()) {
             spi.Sleep();
 	  }
 
