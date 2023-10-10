@@ -24,6 +24,7 @@ namespace Pinetime {
       StopWatch,
       Metronome,
       Motion,
+      Swim,
       Steps,
       PassKey,
       QuickSettings,

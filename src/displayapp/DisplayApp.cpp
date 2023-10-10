@@ -22,6 +22,7 @@
 #include "displayapp/screens/Navigation.h"
 #include "displayapp/screens/Notifications.h"
 #include "displayapp/screens/SystemInfo.h"
+#include "displayapp/screens/Swim.h"
 #include "displayapp/screens/Tile.h"
 #include "displayapp/screens/Twos.h"
 #include "displayapp/screens/FlashLight.h"
@@ -407,8 +408,11 @@ void DisplayApp::LoadScreen(Apps app, DisplayApp::FullRefreshDirections directio
         std::make_unique<Screens::ApplicationList>(this, settingsController, batteryController, bleController, dateTimeController, filesystem);
       break;
     case Apps::Motion:
-      // currentScreen = std::make_unique<Screens::Motion>(motionController);
-      // break;
+      currentScreen = std::make_unique<Screens::Motion>(motionController);
+      break;
+    case Apps::Swim:
+      currentScreen = std::make_unique<Screens::Swim>(motionController);
+      break;
     case Apps::None:
     case Apps::Clock:
       currentScreen = std::make_unique<Screens::Clock>(dateTimeController,
