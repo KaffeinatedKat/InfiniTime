@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <lvgl/lvgl.h>
+#include <cmath>
 #include "displayapp/screens/Screen.h"
 #include <components/motion/MotionController.h>
 
@@ -24,14 +25,17 @@ namespace Pinetime {
         Controllers::MotionController& motionController;
 
 	    lv_obj_t* label;
-	    lv_obj_t* average;
-	    int32_t currentX;
-	    int32_t lastX;
 
-        bool stroking = false;
-	    uint32_t strokes = 0;
-        uint8_t stroke_length = 5;
-        uint8_t stroke_timeout = 50;
+	    int8_t currentX;
+	    int8_t currentY;
+	    int8_t currentZ;
+	    int8_t lastX;
+
+        bool stroke_begin = false;
+        bool stroke_end = false;
+	    uint16_t strokes = 0;
+        uint8_t stroke_length = 10;
+        uint16_t stroke_timeout = 400;
         uint8_t loop_counter = 0;
 
 	    void Calculate();
