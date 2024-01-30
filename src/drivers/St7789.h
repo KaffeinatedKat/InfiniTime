@@ -2,6 +2,11 @@
 #include <cstddef>
 #include <cstdint>
 
+#include <hal/nrf_gpio.h>
+#include <libraries/delay/nrf_delay.h>
+#include <nrfx_log.h>
+#include "drivers/Spi.h"
+
 namespace Pinetime {
   namespace Drivers {
     class Spi;
@@ -33,11 +38,14 @@ namespace Pinetime {
       uint8_t pinDataCommand;
       uint8_t pinReset;
       uint8_t verticalScrollingStartAddress = 0;
+      bool sleepIn;
+      TickType_t lastSleepExit;
 
       void HardwareReset();
       void SoftwareReset();
       void Command2Enable();
       void SleepOut();
+      void EnsureSleepOutPostDelay();
       void SleepIn();
       void ColMod();
       void MemoryDataAccessControl();
