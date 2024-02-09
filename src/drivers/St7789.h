@@ -55,7 +55,7 @@ namespace Pinetime {
       void FrameRateNormalSet();
       void IdleFrameRateOff();
       void IdleFrameRateOn();
-      void WriteToRam();
+      void WriteToRam(const uint8_t* data, size_t size);
       void DisplayOn();
       void DisplayOff();
       void PowerControl();
