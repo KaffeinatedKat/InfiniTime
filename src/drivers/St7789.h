@@ -6,6 +6,7 @@
 #include <libraries/delay/nrf_delay.h>
 #include <nrfx_log.h>
 #include "drivers/Spi.h"
+#include "drivers/PinMap.h"
 
 namespace Pinetime {
   namespace Drivers {
@@ -13,7 +14,7 @@ namespace Pinetime {
 
     class St7789 {
     public:
-      explicit St7789(Spi& spi, uint8_t pinDataCommand, uint8_t pinReset);
+      explicit St7789(Spi& spi);
       St7789(const St7789&) = delete;
       St7789& operator=(const St7789&) = delete;
       St7789(St7789&&) = delete;
@@ -35,8 +36,6 @@ namespace Pinetime {
 
     private:
       Spi& spi;
-      uint8_t pinDataCommand;
-      uint8_t pinReset;
       uint8_t verticalScrollingStartAddress = 0;
       bool sleepIn;
       TickType_t lastSleepExit;
@@ -66,7 +65,9 @@ namespace Pinetime {
       void SetAddrWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
       void SetVdv();
       void WriteCommand(uint8_t cmd);
-      void WriteSpi(const uint8_t* data, size_t size);
+      void WriteSpi(const uint8_t* data, size_t size, void (*TransactionHook)(bool));
+      static void EnableDataMode(bool isStart);
+      static void EnableCommandMode(bool isStart);
 
       enum class Commands : uint8_t {
         SoftwareReset = 0x01,
