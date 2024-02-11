@@ -238,9 +238,11 @@ namespace Pinetime {
           settingsChanged = true;
         }
         settings.alwaysOnDisplay.enabled = state;
-        // the always on state and enabled flags should always match
-        // if the setting is being modified by the user
-        SetAlwaysOnDisplay(state);
+
+        // Don't enable the aod if we are currently in notification sleep
+        if (GetNotificationStatus() != Notification::Sleep) {
+          SetAlwaysOnDisplay(state);
+        }
       }
 
       bool GetAlwaysOnDisplaySetting() const {
